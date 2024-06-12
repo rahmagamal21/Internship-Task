@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'Features/Home/Presentation/Views/home_view.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox('repoCache');
   runApp(const MyApp());
 }
 
