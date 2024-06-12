@@ -2,6 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../../../Data/Data Model/repo_model.dart';
+
 part 'repos_request_state.dart';
 
 class ReposRequestCubit extends Cubit<ReposRequestState> {
@@ -14,8 +16,9 @@ class ReposRequestCubit extends Cubit<ReposRequestState> {
           .get(Uri.parse('https://api.github.com/users/square/repos'));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-
-        emit(ReposRequestSuccess());
+        final repositories =
+            data.map((repo) => GitHubRepository.fromJson(repo)).toList();
+        emit(ReposRequestSuccess(repositories));
       } else {
         emit(ReposRequestFailure(
             'Failed to fetch repositories: ${response.statusCode}'));
