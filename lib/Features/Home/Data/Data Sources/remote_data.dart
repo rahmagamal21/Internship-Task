@@ -5,7 +5,7 @@ import 'package:task/Features/Home/Data/Data%20Model/repo_model.dart';
 
 import '../../../../Core/error/error.dart';
 
-abstract class RemoteData {
+class RemoteData {
   static String apiUrl = 'https://api.github.com/users/square/repos';
   Future<List<GitHubRepository>> fetchRepositories() async {
     final response = await http.get(Uri.parse(apiUrl));
