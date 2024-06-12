@@ -13,7 +13,7 @@ abstract class RemoteData {
       final List<dynamic> data = jsonDecode(response.body);
       return data.map((repo) => GitHubRepository.fromJson(repo)).toList();
     } else {
-      throw throw ServerFailure('Failed to load repositories');
+      throw ServerFailure('Failed to load repositories');
     }
   }
 }

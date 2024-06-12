@@ -1,11 +1,13 @@
-class GitHubRepository {
+import 'package:task/Features/Home/Domain/entities/git_repo.dart';
+
+class GitHubRepository extends GitRepo {
   GitHubRepository({
-    required name,
-    required description,
-    required ownerName,
-    required isForked,
-    required repoLink,
-    required ownerLink,
+    required super.name,
+    required super.description,
+    required super.ownerName,
+    required super.isForked,
+    required super.repoLink,
+    required super.ownerLink,
   });
 
   factory GitHubRepository.fromJson(Map<String, dynamic> json) {
