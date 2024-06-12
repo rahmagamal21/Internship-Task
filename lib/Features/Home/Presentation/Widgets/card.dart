@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:task/Features/Home/Presentation/Widgets/dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard(
@@ -7,11 +7,15 @@ class CustomCard extends StatelessWidget {
       required this.title,
       required this.subTitle,
       required this.trailing,
-      required this.isForked});
+      required this.isForked,
+      required this.ownerLink,
+      required this.repoLink});
   final String title;
   final String subTitle;
   final String trailing;
   final bool isForked;
+  final String ownerLink;
+  final String repoLink;
 
   @override
   Widget build(BuildContext context) {
@@ -27,5 +31,45 @@ class CustomCard extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void alertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (contex) {
+        return AlertDialog(
+          title: const Text('Want to open repository URL or owner URL?'),
+          content: const Text("Choose an option below:"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                launchURL(repoLink);
+              },
+              child: const Text('Repo URL'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                launchURL(ownerLink);
+              },
+              child: const Text('Owner URL'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void launchURL(String url) async {
+    if (await canLaunchUrl(
+      Uri.file(url),
+    )) {
+      await launchUrl(
+        Uri.file(url),
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

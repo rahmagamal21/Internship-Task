@@ -59,6 +59,8 @@ class _HomeViewState extends State<HomeView> {
                               subTitle: repository.description,
                               trailing: repository.ownerName,
                               isForked: repository.isForked,
+                              ownerLink: repository.ownerLink,
+                              repoLink: repository.repoLink,
                             );
                           },
                           separatorBuilder: (context, index) {
