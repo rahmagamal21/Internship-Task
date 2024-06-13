@@ -12,6 +12,7 @@ class ReposRequestCubit extends Cubit<ReposRequestState> {
   int currentPage = 1;
   List<GitHubRepository> repositories = [];
   List<GitHubRepository> displayedRepositories = [];
+  bool hasMore = true;
 
   ReposRequestCubit() : super(ReposRequestInitial());
   Future<void> fetchRepositories() async {
@@ -83,5 +84,13 @@ class ReposRequestCubit extends Cubit<ReposRequestState> {
       displayedRepositories = List.from(repositories);
       emit(ReposRequestSuccess(displayedRepositories));
     }
+  }
+
+  Future<void> refreshRepositories() async {
+    currentPage = 1;
+    repositories.clear();
+    displayedRepositories.clear();
+    hasMore = true;
+    await fetchRepositories();
   }
 }

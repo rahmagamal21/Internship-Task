@@ -37,12 +37,9 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   void scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
-      if (!isLoadingMore) {
-        isLoadingMore = true;
-        BlocProvider.of<ReposRequestCubit>(context).fetchMoreRepositories();
-      }
+    if (scrollController.position.pixels ==
+        scrollController.position.maxScrollExtent) {
+      BlocProvider.of<ReposRequestCubit>(context).fetchMoreRepositories();
     }
   }
 
@@ -56,27 +53,33 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ListView.separated(
-        controller: scrollController,
-        itemCount: widget.repositories.length,
-        itemBuilder: (context, index) {
-          if (index < displayedRepositories.length) {
-            final repository = displayedRepositories[index];
-            return CustomCard(
-              title: repository.name,
-              subTitle: repository.description,
-              trailing: repository.ownerName,
-              isForked: repository.isForked,
-              ownerLink: repository.ownerLink,
-              repoLink: repository.repoLink,
-            );
-          } else {
-            return buildLoaderIndicator();
-          }
-        },
-        separatorBuilder: (context, index) {
-          return const CustomDivider();
-        },
+      child: RefreshIndicator(
+        onRefresh: () =>
+            context.read<ReposRequestCubit>().refreshRepositories(),
+        child: ListView.separated(
+          controller: scrollController,
+          itemCount: isLoadingMore
+              ? widget.repositories.length + 1
+              : widget.repositories.length,
+          itemBuilder: (context, index) {
+            if (index < displayedRepositories.length) {
+              final repository = displayedRepositories[index];
+              return CustomCard(
+                title: repository.name,
+                subTitle: repository.description,
+                trailing: repository.ownerName,
+                isForked: repository.isForked,
+                ownerLink: repository.ownerLink,
+                repoLink: repository.repoLink,
+              );
+            } else {
+              return buildLoaderIndicator();
+            }
+          },
+          separatorBuilder: (context, index) {
+            return const CustomDivider();
+          },
+        ),
       ),
     );
   }
