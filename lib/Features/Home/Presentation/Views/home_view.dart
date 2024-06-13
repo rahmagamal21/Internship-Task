@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
-import 'package:task/Features/Home/Data/Data%20Model/repo_model.dart';
 import 'package:task/Features/Home/Presentation/Controller/cubit/repos_request_cubit.dart';
 import 'package:task/Features/Home/Presentation/Widgets/card.dart';
 
@@ -18,8 +17,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
-  final Box<String> _repoCacheBox = Hive.box('repoCache');
-  List<GitHubRepository> _repositories = [];
   @override
   void dispose() {
     scrollController.dispose();
