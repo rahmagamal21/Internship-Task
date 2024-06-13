@@ -12,6 +12,12 @@ final class ReposRequestSuccess extends ReposRequestState {
   ReposRequestSuccess(this.repositories);
 }
 
+class ReposRequestMoreSuccess extends ReposRequestState {
+  final List<GitHubRepository> repositories;
+
+  ReposRequestMoreSuccess(this.repositories);
+}
+
 final class ReposRequestFailure extends ReposRequestState {
   final String errorMessage;
 

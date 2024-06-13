@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:task/Features/Home/Presentation/Controller/cubit/repos_request_cubit.dart';
-import 'package:task/Features/Home/Presentation/Widgets/card.dart';
-
+import '../Widgets/home_view_body.dart';
 import '../Widgets/search_field.dart';
-import '../widgets/divider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -15,11 +13,10 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
+
   @override
   void dispose() {
-    scrollController.dispose();
     searchController.dispose();
     Hive.close();
     super.dispose();
@@ -42,30 +39,12 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 BlocBuilder<ReposRequestCubit, ReposRequestState>(
                   builder: (context, state) {
-                    if (state is ReposRequestLoading) {
+                    if (state is ReposRequestLoading ||
+                        state is ReposRequestMoreSuccess) {
                       return const CircularProgressIndicator();
                     } else if (state is ReposRequestSuccess) {
                       final repositories = state.repositories;
-                      return Expanded(
-                        child: ListView.separated(
-                          itemBuilder: (context, index) {
-                            final repository = repositories[index];
-
-                            return CustomCard(
-                              title: repository.name,
-                              subTitle: repository.description,
-                              trailing: repository.ownerName,
-                              isForked: repository.isForked,
-                              ownerLink: repository.ownerLink,
-                              repoLink: repository.repoLink,
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return const CustomDivider();
-                          },
-                          itemCount: repositories.length,
-                        ),
-                      );
+                      return HomeBody(repositories: repositories);
                     } else if (state is ReposRequestFailure) {
                       return Center(
                         child: Text(

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../Controller/cubit/repos_request_cubit.dart';
 
 class CustomSearchField extends StatelessWidget {
   final TextEditingController searchController;
@@ -13,6 +16,9 @@ class CustomSearchField extends StatelessWidget {
       height: 48,
       child: TextField(
         controller: searchController,
+        onChanged: (text) {
+          BlocProvider.of<ReposRequestCubit>(context).filterRepositories(text);
+        },
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.grey[200],
